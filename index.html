@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brainrot検索</title>
+<style>
+  body { font-family:'Arial'; background:#111; color:#eee; padding:20px; }
+  h1 { text-align:center; color:#00ffcc; margin-bottom:30px; }
+  input[type="text"] { display:block; margin:0 auto; width:300px; padding:10px 15px; font-size:16px; border-radius:8px; border:none; outline:none; background:#222; color:#eee; }
+  input[type="text"]::placeholder { color:#888; }
+  #result { margin-top:30px; display:flex; flex-wrap:wrap; justify-content:center; gap:15px; }
+  .character-card { background:#222; border:2px solid #00ffcc; border-radius:12px; padding:15px; width:250px; box-shadow:0 0 15px #00ffcc60; transition:transform 0.2s, box-shadow 0.2s; cursor:pointer; }
+  .character-card:hover { transform:translateY(-5px); box-shadow:0 0 25px #00ffcc80; }
+  .character-card img { max-width:100%; border-radius:8px; margin-bottom:10px; border:1px solid #00ffcc; }
+  .character-card strong { color:#00ffcc; }
+  .no-result { text-align:center; font-size:18px; color:#ff5555; width:100%; margin-top:20px; }
+  #popup { position:absolute; display:none; background:#222; border:2px solid #00ffcc; padding:10px; border-radius:8px; color:#eee; z-index:1000; max-width:300px; pointer-events:none; box-shadow:0 0 15px #00ffcc60; }
+</style>
+</head>
+<body>
+
+<h1>Brainrot検索</h1>
+<input type="text" id="searchInput" placeholder="キャラクター名やアカウント名で検索...">
+<div id="result"></div>
+<div id="popup"></div>
+
+<script>
+const input = document.getElementById("searchInput");
+const resultDiv = document.getElementById("result");
+const popup = document.getElementById("popup");
+let characters = [];
+
+// JSONを読み込む
+fetch('character.json')
+  .then(res => res.json())
+  .then(data => {
+    characters = data;
+    renderResults();
+  })
+  .catch(err => {
+    console.error("JSON読み込みエラー:", err);
+    resultDiv.textContent = "キャラクターデータの読み込みに失敗しました。";
+  });
+
+// 結果表示
+function renderResults(filter = "") {
+  resultDiv.innerHTML = "";
+  const query = filter.toLowerCase();
+  let found = false;
+
+  characters.forEach(char => {
+    // 検索バーが空または部分一致
+    if (!query || char.name.toLowerCase().includes(query) || char.accounts.some(acc => acc.toLowerCase().includes(query))) {
+      found = true;
+
+      const card = document.createElement("div");
+      card.classList.add("character-card");
+      card.dataset.characterIndex = characters.indexOf(char); // JSON配列のindexを保持
+
+      card.innerHTML = `
+        <img src="${char.img}" alt="${char.name}">
+        <p><strong>キャラクター:</strong> ${char.name} (${char.rank})</p>
+        <p><strong>所持アカウント:</strong> ${char.accounts.join(", ")}</p>
+      `;
+
+      resultDiv.appendChild(card);
+    }
+  });
+
+  if (!found) {
+    const noRes = document.createElement("div");
+    noRes.classList.add("no-result");
+    noRes.textContent = "該当するキャラクターやアカウントはありません。";
+    resultDiv.appendChild(noRes);
+  }
+}
+
+// 検索バー
+input.addEventListener("input", () => renderResults(input.value));
+
+// hoverで関連キャラ表示
+resultDiv.addEventListener('mouseover', e => {
+  const card = e.target.closest('.character-card');
+  if (!card) return;
+  const idx = card.dataset.characterIndex;
+  const charData = characters[idx];
+
+  if (!charData.related || charData.related.length === 0) {
+    popup.style.display = 'none';
+    return;
+  }
+
+  let html = '';
+  charData.related.forEach(c => {
+    html += `<strong>${c.name} (${c.rank})</strong><br>`;
+    html += `所持アカウント: ${c.accounts.join(', ')}<br><br>`;
+  });
+
+  popup.innerHTML = html;
+  popup.style.display = 'block';
+});
+
+// マウスに追従
+resultDiv.addEventListener('mousemove', e => {
+  popup.style.top = e.pageY + 15 + 'px';
+  popup.style.left = e.pageX + 15 + 'px';
+});
+
+// マウスアウトで非表示
+resultDiv.addEventListener('mouseout', e => {
+  if (!e.target.closest('.character-card')) {
+    popup.style.display = 'none';
+  }
+});
+</script>
+
+</body>
+</html>

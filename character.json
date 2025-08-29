@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Noobini Pizzanini",
+    "img": "Noobini Pizzanini.png",
+    "rank": "Normal",
+    "accounts": ["Syyokki"],
+    "related": [
+      {
+        "name": "Noobini Pizzanini_Gold"
+        "img": "Noobini Pizzanini_Gold.png",
+        "rank": "Gold",
+        "accounts": ["Syyokki"]
+      },
+      {
+        "name": "Noobini Pizzanini_Diamond"
+        "img": "Noobini Pizzanini_Diamond.png",
+        "rank": "Diamond",
+        "accounts": ["none"]
+      },
+      {
+        "name": "Noobini Pizzanini_Rainbow"
+        "img": "Noobini Pizzanini_Rainbow.png",
+        "rank": "Rainbowe",
+        "accounts": ["none"]
+      },
+      {
+        "name": "Noobini Pizzanini_Galaxy",
+        "img": "Noobini Pizzanini_Galaxy.png",
+        "rank": "Galaxy",
+        "accounts": ["none"]
+      }
+    ]
+  },
+  [
+  {
+    "name": "Lirili Larila",
+    "img": "Lirili Larila.png",
+    "rank": "Normal",
+    "accounts": ["none"],
+    "related": [
+      {
+        "name": "Lirili Larila_Gold"
+        "img": "Lirili Larila_Gold.png",
+        "rank": "Gold",
+        "accounts": ["none"]
+      },
+      {
+        "name": "Lirili Larila_Diamond"
+        "img": "Lirili Larila_Diamond.png",
+        "rank": "Diamond",
+        "accounts": ["none"]
+      },
+      {
+        "name": "Lirili Larila_Rainbow"
+        "img": "Lirili Larila_Rainbow.png",
+        "rank": "Rainbowe",
+        "accounts": ["none"]
+      },
+      {
+        "name": "Lirili Larila_Galaxy",
+        "img": "Lirili Larila_Galaxy.png",
+        "rank": "Galaxy",
+        "accounts": ["none"]
+      }
+    ]
+  }
+]
